@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Halaqah / Kelas Ta'lim Views -->
+    <record id="view_mahad_talim_class_tree" model="ir.ui.view">
+        <field name="name">mahad.talim.class.tree</field>
+        <field name="model">mahad.talim.class</field>
+        <field name="arch" type="xml">
+            <list string="Halaqah Ta'lim">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="musyrif_id"/>
+                <field name="semester"/>
+                <field name="academic_year"/>
+                <field name="student_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mahad_talim_class_form" model="ir.ui.view">
+        <field name="name">mahad.talim.class.form</field>
+        <field name="model">mahad.talim.class</field>
+        <field name="arch" type="xml">
+            <form string="Halaqah / Kelas Ta'lim">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nama Halaqah / Kelompok..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="musyrif_id"/>
+                        </group>
+                        <group>
+                            <field name="semester"/>
+                            <field name="academic_year"/>
+                            <field name="student_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Daftar Mahasantri" name="students">
+                            <field name="student_ids">
+                                <list string="Mahasantri">
+                                    <field name="name"/>
+                                    <field name="ref" string="NIM"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Keterangan / Silabus" name="description">
+                            <field name="description" placeholder="Catatan silabus atau target hafalan..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mahad_talim_class" model="ir.actions.act_window">
+        <field name="name">Halaqah / Kelas Ta'lim</field>
+        <field name="res_model">mahad.talim.class</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Buku Kendali Mahasantri Views -->
+    <record id="view_mahad_talim_record_tree" model="ir.ui.view">
+        <field name="name">mahad.talim.record.tree</field>
+        <field name="model">mahad.talim.record</field>
+        <field name="arch" type="xml">
+            <list string="Buku Kendali Mahasantri">
+                <field name="date"/>
+                <field name="student_id"/>
+                <field name="class_id"/>
+                <field name="category"/>
+                <field name="surah_juz_topic"/>
+                <field name="grade_status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mahad_talim_record_form" model="ir.ui.view">
+        <field name="name">mahad.talim.record.form</field>
+        <field name="model">mahad.talim.record</field>
+        <field name="arch" type="xml">
+            <form string="Buku Kendali Hafalan &amp; Ta'lim">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="class_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="category"/>
+                            <field name="surah_juz_topic"/>
+                            <field name="grade_status"/>
+                        </group>
+                    </group>
+                    <group string="Catatan Pembina / Musyrif">
+                        <field name="notes" placeholder="Catatan kelancaran, tajwid, atau evaluasi..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mahad_talim_record" model="ir.actions.act_window">
+        <field name="name">Buku Kendali Hafalan &amp; Ta'lim</field>
+        <field name="res_model">mahad.talim.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

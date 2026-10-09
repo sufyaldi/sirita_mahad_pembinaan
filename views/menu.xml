@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!--  1. Akademik & Ta'lim Ma'had                                 -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_mahad_academic_root"
+              name="Akademik"
+              parent="sirita_mahad.menu_hostel_root"
+              sequence="10"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_talim_class"
+              name="Halaqah / Kelas Ta'lim"
+              parent="menu_mahad_academic_root"
+              action="action_mahad_talim_class"
+              sequence="10"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_talim_record"
+              name="Buku Kendali Hafalan &amp; Ta'lim"
+              parent="menu_mahad_academic_root"
+              action="action_mahad_talim_record"
+              sequence="20"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_syahadah"
+              name="Sertifikat Syahadah Ma'had"
+              parent="menu_mahad_academic_root"
+              action="action_mahad_syahadah"
+              sequence="30"
+              groups="sirita_mahad.group_hostel_manager"/>
+
+    <!-- ============================================================ -->
+    <!--  2. Perizinan &amp; Gate Control                                 -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_mahad_permit_root"
+              name="Perizinan &amp; Gate Control"
+              parent="sirita_mahad.menu_hostel_root"
+              sequence="15"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_permit"
+              name="Izin Pesiar &amp; Bermalam"
+              parent="menu_mahad_permit_root"
+              action="action_mahad_permit"
+              sequence="10"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <!-- ============================================================ -->
+    <!--  3. Kedisiplinan &amp; Takzir                                    -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_mahad_discipline_root"
+              name="Kedisiplinan &amp; Takzir"
+              parent="sirita_mahad.menu_hostel_root"
+              sequence="20"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_penalty_record"
+              name="Pelanggaran &amp; Takzir"
+              parent="menu_mahad_discipline_root"
+              action="action_mahad_penalty_record"
+              sequence="10"
+              groups="sirita_mahad.group_hostel_user"/>
+
+    <menuitem id="menu_mahad_penalty_category"
+              name="Master Kategori Pelanggaran"
+              parent="menu_mahad_discipline_root"
+              action="action_mahad_penalty_category"
+              sequence="20"
+              groups="sirita_mahad.group_hostel_manager"/>
+
+    <!-- ============================================================ -->
+    <!--  4. Keuangan &amp; Tagihan BLU                                   -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_mahad_billing_wizard"
+              name="Generasi Tagihan Massal (BLU)"
+              parent="sirita_mahad.menu_hostel_fee"
+              action="action_mahad_billing_wizard"
+              sequence="20"
+              groups="sirita_mahad.group_hostel_manager"/>
+
+</odoo>

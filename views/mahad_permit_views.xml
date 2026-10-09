@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mahad_permit_tree" model="ir.ui.view">
+        <field name="name">mahad.permit.tree</field>
+        <field name="model">mahad.permit</field>
+        <field name="arch" type="xml">
+            <list string="Perizinan Pesiar &amp; Bermalam">
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="permit_type"/>
+                <field name="destination"/>
+                <field name="departure_time"/>
+                <field name="expected_return_time"/>
+                <field name="qr_code_token"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'musyrif_approved', 'mudhir_approved')" decoration-warning="state == 'checked_out'" decoration-success="state == 'checked_in'" decoration-danger="state == 'cancelled'"/>
+                <field name="is_late" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mahad_permit_form" model="ir.ui.view">
+        <field name="name">mahad.permit.form</field>
+        <field name="model">mahad.permit</field>
+        <field name="arch" type="xml">
+            <form string="Perizinan Pesiar / Bermalam">
+                <header>
+                    <button name="action_approve_musyrif" string="Setujui (Musyrif)" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve_mudhir" string="Setujui (Pengasuh/Mudhir)" type="object" class="oe_highlight" invisible="state != 'musyrif_approved'"/>
+                    <button name="action_scan_checkout" string="Scan Satpam: Keluar Complex" type="object" class="btn-warning" invisible="state not in ('musyrif_approved', 'mudhir_approved')"/>
+                    <button name="action_scan_checkin" string="Scan Satpam: Kembali ke Asrama" type="object" class="btn-success" invisible="state != 'checked_out'"/>
+                    <button name="action_cancel" string="Tolak / Batalkan" type="object" invisible="state in ('checked_in', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,musyrif_approved,mudhir_approved,checked_out,checked_in"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="student_id" readonly="state != 'draft'"/>
+                            <field name="permit_type" readonly="state != 'draft'"/>
+                            <field name="destination" readonly="state != 'draft'"/>
+                            <field name="reason" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="departure_time" readonly="state != 'draft'"/>
+                            <field name="expected_return_time" readonly="state != 'draft'"/>
+                            <field name="qr_code_token" readonly="1"/>
+                            <field name="is_late" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Log Waktu Aktual Check-in / Out Pos Satpam">
+                        <group>
+                            <field name="actual_checkout_time" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="actual_checkin_time" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mahad_permit" model="ir.actions.act_window">
+        <field name="name">Perizinan Pesiar &amp; Bermalam</field>
+        <field name="res_model">mahad.permit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
