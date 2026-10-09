@@ -58,6 +58,7 @@ Modul ini beroperasi berdampingan dengan modul manajemen hunian asrama (sirita_m
 
 ### Struktur Direktori Modul
 
+```text
 sirita_mahad_pembinaan/
 |-- __init__.py
 |-- __manifest__.py
@@ -83,6 +84,7 @@ sirita_mahad_pembinaan/
     |-- mahad_syahadah_views.xml
     |-- mahad_talim_views.xml
     `-- menu.xml                   (Struktur urutan navigasi menu)
+```
 
 ---
 
