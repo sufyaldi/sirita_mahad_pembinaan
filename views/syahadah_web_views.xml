@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="page_syahadah_verify" name="Verifikasi Syahadah Kelulusan Ma'had">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Hero Header -->
+                <section class="py-5 text-white" style="background: linear-gradient(135deg, #0D9488 0%, #115E59 100%);">
+                    <div class="container text-center py-4">
+                        <span class="badge rounded-pill bg-white text-teal px-3 py-2 fw-semibold mb-3 shadow-sm" style="color: #0D9488 !important;">
+                            🎓 Layanan Akademik Ma'had Al-Jami'ah
+                        </span>
+                        <h1 class="fw-bold display-5 mb-3">Verifikasi Syahadah Kelulusan</h1>
+                        <p class="lead opacity-75 mx-auto" style="max-width: 680px;">
+                            Layanan verifikasi keaslian dan status kelulusan Syahadah Mahasantri Ma'had Al-Jami'ah IAIN Parepare terintegrasi dengan SIAKAD.
+                        </p>
+
+                        <!-- Search Form Card -->
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-12 col-md-8 col-lg-6">
+                                <form action="/syahadah/verify" method="GET" class="d-flex bg-white p-2 rounded-pill shadow-lg">
+                                    <input type="text" name="q" t-att-value="query" 
+                                           class="form-control border-0 rounded-pill px-4 shadow-none text-dark" 
+                                           placeholder="Ketik NIM Mahasantri atau Nomor Syahadah..." required="required"/>
+                                    <button type="submit" class="btn btn-teal rounded-pill px-4 fw-semibold text-white d-flex align-items-center gap-2" style="background-color: #0D9488;">
+                                        <i class="fa fa-search"></i>
+                                        <span>Cek</span>
+                                    </button>
+                                </form>
+                                <small class="text-white-50 mt-2 d-block">
+                                    Contoh: Masukkan NIM (contoh: <code>2120203886...</code>) atau No. Syahadah (contoh: <code>SYH/2026/001</code>)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Search Results Section -->
+                <section class="py-5 bg-light" style="min-height: 420px;">
+                    <div class="container">
+                        
+                        <!-- JIKA PENCARIAN BERHASIL & DITEMUKAN -->
+                        <t t-if="searched and syahadah">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-10 col-lg-8">
+                                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                                        <!-- Header Card Status -->
+                                        <div class="p-4 text-white text-center" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+                                            <div class="display-4 mb-2">
+                                                <i class="fa fa-check-circle"></i>
+                                            </div>
+                                            <h3 class="fw-bold mb-1">SYAHADAH VALID &amp; TERVERIFIKASI</h3>
+                                            <p class="mb-0 text-white-50 small">Dokumen resmi terdaftar di pangkalan data Ma'had Al-Jami'ah IAIN Parepare</p>
+                                        </div>
+
+                                        <div class="card-body p-4 p-md-5">
+                                            <div class="row g-4">
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Nama Lengkap Mahasantri</span>
+                                                    <h5 class="fw-bold text-dark mb-0" t-out="syahadah.student_id.name"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Nomor Induk Mahasiswa (NIM)</span>
+                                                    <h5 class="fw-bold text-dark mb-0" t-out="syahadah.nim or '-'"/>
+                                                </div>
+                                                
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Nomor Registrasi Syahadah</span>
+                                                    <span class="badge bg-dark-subtle text-dark fs-6 px-3 py-2 rounded-3" t-out="syahadah.name"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Tahun Akademik Kelulusan</span>
+                                                    <span class="fw-bold text-dark fs-6" t-out="syahadah.academic_year or '2026/2027'"/>
+                                                </div>
+
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Predikat Kelulusan</span>
+                                                    <span class="badge bg-success-subtle text-success fs-6 px-3 py-2 rounded-pill fw-bold" 
+                                                          t-out="dict(syahadah._fields['predikat'].selection).get(syahadah.predikat)"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Tanggal Diterbitkan</span>
+                                                    <span class="fw-bold text-dark fs-6" t-out="syahadah.issue_date.strftime('%d %B %Y') if syahadah.issue_date else '-'"/>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="p-3 rounded-3 bg-light border d-flex align-items-center gap-3">
+                                                        <i class="fa fa-unlock-alt text-success fs-3"></i>
+                                                        <div>
+                                                            <strong class="d-block text-dark">Status Syarat Skripsi SIAKAD: Terpenuhi</strong>
+                                                            <small class="text-muted">Data kelulusan ini telah tersinkronisasi sebagai prasyarat ujian munaqasyah/skripsi.</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer bg-white border-top p-3 text-center">
+                                            <a href="/syahadah/verify" class="btn btn-outline-secondary rounded-pill px-4 btn-sm">
+                                                <i class="fa fa-refresh me-1"></i> Periksa Data Lain
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- JIKA SUDAH CARI TAPI TIDAK DITEMUKAN -->
+                        <t t-elif="searched and not syahadah">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-8 col-lg-6">
+                                    <div class="card border-0 shadow-sm rounded-4 text-center p-4 p-md-5">
+                                        <div class="text-danger display-4 mb-3">
+                                            <i class="fa fa-times-circle"></i>
+                                        </div>
+                                        <h4 class="fw-bold text-dark mb-2">Data Syahadah Tidak Ditemukan</h4>
+                                        <p class="text-muted mb-4">
+                                            Tidak ditemukan data Syahadah yang valid dan berstatus diterbitkan dengan kata kunci <strong>"<t t-out="query"/>"</strong>.
+                                        </p>
+                                        <div class="alert alert-warning text-start small mb-4">
+                                            <strong>Catatan:</strong>
+                                            <ul class="mb-0 ps-3 mt-1">
+                                                <li>Pastikan NIM atau Nomor Syahadah yang Anda ketik sudah benar.</li>
+                                                <li>Mahasantri yang bersangkutan mungkin belum menyelesaikan target hafalan atau belum berstatus lulus (<em>validated</em>).</li>
+                                            </ul>
+                                        </div>
+                                        <a href="/syahadah/verify" class="btn btn-outline-primary rounded-pill px-4 align-self-center">
+                                            Coba Lagi
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- TAMPILAN AWAL SEBELUM PENCARIAN -->
+                        <t t-else="">
+                            <div class="row g-4 justify-content-center">
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm rounded-3 p-4 h-100 text-center">
+                                        <div class="text-teal fs-1 mb-3" style="color: #0D9488;">
+                                            <i class="fa fa-shield"></i>
+                                        </div>
+                                        <h5 class="fw-bold">Resmi &amp; Sah</h5>
+                                        <p class="text-muted small mb-0">Tervalidasi langsung oleh Pengelola Ma'had Al-Jami'ah IAIN Parepare.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm rounded-3 p-4 h-100 text-center">
+                                        <div class="text-teal fs-1 mb-3" style="color: #0D9488;">
+                                            <i class="fa fa-database"></i>
+                                        </div>
+                                        <h5 class="fw-bold">Sinkronisasi SIAKAD</h5>
+                                        <p class="text-muted small mb-0">Terhubung dengan sistem akademik kampus sebagai pembuka kunci syarat skripsi.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm rounded-3 p-4 h-100 text-center">
+                                        <div class="text-teal fs-1 mb-3" style="color: #0D9488;">
+                                            <i class="fa fa-qrcode"></i>
+                                        </div>
+                                        <h5 class="fw-bold">Pencarian Cepat</h5>
+                                        <p class="text-muted small mb-0">Cukup masukkan NIM mahasiswa untuk memeriksa keabsahan sertifikat.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

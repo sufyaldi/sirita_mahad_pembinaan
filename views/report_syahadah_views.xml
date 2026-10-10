@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Custom Paperformat A4 Portrait for Certificate -->
+    <record id="paperformat_syahadah_certificate" model="report.paperformat">
+        <field name="name">Syahadah Certificate A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_report_mahad_syahadah" model="ir.actions.report">
+        <field name="name">Sertifikat Syahadah (PDF)</field>
+        <field name="model">mahad.syahadah</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sirita_mahad_pembinaan.report_syahadah_template</field>
+        <field name="print_report_name">'Sertifikat_Syahadah_%s' % (object.name.replace('/', '_'))</field>
+        <field name="binding_model_id" ref="model_mahad_syahadah"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_syahadah_certificate"/>
+    </record>
+
+    <!-- Report QWeb Template -->
+    <template id="report_syahadah_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="font-family: 'Times New Roman', serif; position: relative; width: 100%; height: 100%; box-sizing: border-box; padding: 25px;">
+                    
+                    <!-- Certificate Ornate Guilloche Border Frame -->
+                    <div style="border: 4px double #1E3A8A; outline: 1px solid #93C5FD; outline-offset: 4px; padding: 25px 35px; min-height: 1000px; position: relative; background: #ffffff;">
+                        
+                        <!-- Decorative Inner Border -->
+                        <div style="border: 1px solid #1E3A8A; padding: 20px 25px; min-height: 950px; position: relative;">
+                            
+                            <!-- Nomor Arsip Surat / Dokumen di Pojok Kanan Atas -->
+                            <div style="text-align: right; font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 5px;">
+                                <span t-out="doc.name"/>
+                            </div>
+
+                            <!-- Header Kop Lembaga / Kampus -->
+                            <div style="text-align: center; margin-bottom: 10px;">
+                                <img src="/sirita_theme/static/img/logo.png" style="height: 70px; width: auto; margin-bottom: 5px;" alt="Logo Kampus"/>
+                                <div style="font-size: 12px; font-weight: bold; letter-spacing: 1px; color: #1E3A8A; font-family: Arial, sans-serif;">
+                                    KEMENTERIAN AGAMA REPUBLIK INDONESIA
+                                </div>
+                                <div style="font-size: 15px; font-weight: 900; letter-spacing: 0.5px; font-family: Arial, sans-serif; text-transform: uppercase;">
+                                    PUSAT MA'HAD AL-JAMI'AH
+                                </div>
+                                <div style="font-size: 16px; font-weight: 900; letter-spacing: 0.5px; font-family: Arial, sans-serif; text-transform: uppercase;">
+                                    INSTITUT AGAMA ISLAM NEGERI (IAIN) PAREPARE
+                                </div>
+                                <div style="font-size: 9px; font-family: Arial, sans-serif; color: #4B5563;">
+                                    Jl. Amal Bakti No. 8 Soreang Kota Parepare 91132 | Website: https://mahad.iainpare.ac.id
+                                </div>
+                            </div>
+
+                            <!-- Garis Pembatas Kop -->
+                            <div style="border-bottom: 2px solid #000; border-top: 1px solid #000; height: 3px; margin: 8px 0 15px 0;"></div>
+
+                            <!-- Lafadz Basmalah -->
+                            <div style="text-align: center; margin-bottom: 12px;">
+                                <span style="font-size: 24px; font-family: 'Scheherazade', 'Amiri', 'Traditional Arabic', serif; font-weight: bold;">
+                                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                                </span>
+                            </div>
+
+                            <!-- Pengantar Sertifikat -->
+                            <div style="text-align: justify; font-size: 12px; line-height: 1.5; margin-bottom: 15px;">
+                                Setelah memperhatikan hasil penilaian dan keputusan Majelis Penguji Ma'had Al-Jami'ah Institut Agama Islam Negeri (IAIN) Parepare, dengan ini Kepala Pusat Ma'had Al-Jami'ah memberikan:
+                            </div>
+
+                            <!-- Judul Sertifikat -->
+                            <div style="text-align: center; margin: 15px 0;">
+                                <h2 style="font-family: Arial, sans-serif; font-weight: 900; font-size: 20px; letter-spacing: 1px; margin: 0; text-transform: uppercase; color: #111827;">
+                                    SERTIFIKAT KELULUSAN MA'HAD (SYAHADAH)
+                                </h2>
+                                <div style="font-size: 12px; font-weight: bold; margin-top: 4px; font-family: Arial, sans-serif;">
+                                    Kepada:
+                                </div>
+                            </div>
+
+                            <!-- Biodata Mahasantri -->
+                            <div style="margin: 15px auto; width: 85%; font-size: 13px; line-height: 1.7;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="width: 25%; font-weight: bold;">Nama</td>
+                                        <td style="width: 3%;">:</td>
+                                        <td style="font-weight: 900; font-size: 14px; text-transform: uppercase;" t-out="doc.student_id.name"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">NIM</td>
+                                        <td>:</td>
+                                        <td style="font-weight: bold;" t-out="doc.nim or '-'"/>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Fak/Prodi</td>
+                                        <td>:</td>
+                                        <td t-out="doc.faculty_prodi or 'Tarbiyah / Pendidikan Agama Islam'"/>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Keterangan Nilai -->
+                            <div style="font-size: 12px; margin-top: 10px; margin-bottom: 8px;">
+                                Dengan nilai capaian kompetensi sebagai berikut:
+                            </div>
+
+                            <!-- Tabel Nilai Kompetensi (Persis Seperti Gambar 17) -->
+                            <table style="width: 100%; border-collapse: collapse; text-align: center; font-family: Arial, sans-serif; margin-bottom: 15px;">
+                                <thead>
+                                    <tr style="background-color: #f8fafc;">
+                                        <th colspan="4" style="border: 2px solid #000; padding: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase;">
+                                            KOMPETENSI / KEMAMPUAN
+                                        </th>
+                                    </tr>
+                                    <tr style="background-color: #f1f5f9; font-size: 10px; font-weight: bold;">
+                                        <th style="border: 2px solid #000; padding: 8px 4px; width: 25%;">
+                                            BACAAN<br/>AL-QUR'AN
+                                        </th>
+                                        <th style="border: 2px solid #000; padding: 8px 4px; width: 25%;">
+                                            HAFALAN SURAT<br/>PENDEK
+                                        </th>
+                                        <th style="border: 2px solid #000; padding: 8px 4px; width: 25%;">
+                                            HAFALAN DO'A<br/>HARIAN
+                                        </th>
+                                        <th style="border: 2px solid #000; padding: 8px 4px; width: 25%;">
+                                            PRAKTIK IBADAH<br/>&amp; TA'LIM
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="font-size: 20px; font-weight: 900;">
+                                        <td style="border: 2px solid #000; padding: 12px 6px;" t-out="doc.score_quran or 85"/>
+                                        <td style="border: 2px solid #000; padding: 12px 6px;" t-out="doc.score_surat_pendek or 80"/>
+                                        <td style="border: 2px solid #000; padding: 12px 6px;" t-out="doc.score_doa or 75"/>
+                                        <td style="border: 2px solid #000; padding: 12px 6px;" t-out="doc.score_ibadah or 80"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Pernyataan Kelulusan -->
+                            <div style="font-size: 12px; line-height: 1.5; text-align: justify; margin-bottom: 25px;">
+                                Selanjutnya yang bersangkutan dinyatakan <strong style="text-transform: uppercase;">LULUS</strong> dengan Predikat <strong><t t-out="dict(doc._fields['predikat'].selection).get(doc.predikat)"/></strong> (<t t-out="doc.tahfizh_target_achieved or 'Juz 30 Mutqin'"/>) dan memiliki kompetensi sesuai kriteria sebagaimana yang tercantum dalam sertifikat ini.
+                            </div>
+
+                            <!-- Area Tanda Tangan & QR Code Verifikasi (Bawah) -->
+                            <div style="width: 100%; margin-top: 20px;">
+                                <table style="width: 100%; border: none;">
+                                    <tr>
+                                        <!-- QR Code Verifikasi Publik -->
+                                        <td style="width: 45%; vertical-align: top; text-align: left;">
+                                            <div style="display: inline-block; text-align: center;">
+                                                <!-- Barcode / QR Code generator Odoo -->
+                                                <img t-att-src="'/report/barcode/?barcode_type=QR&amp;value=https://mahad.iainpare.ac.id/syahadah/verify?q=' + (doc.nim or doc.name) + '&amp;width=120&amp;height=120'" 
+                                                     style="width: 110px; height: 110px; border: 1px solid #ddd; padding: 2px;" alt="QR Code Verifikasi"/>
+                                                <div style="font-size: 8px; font-family: Arial, sans-serif; color: #4B5563; margin-top: 4px; max-width: 150px; line-height: 1.2;">
+                                                    <em>e-Sertifikat resmi diterbitkan oleh Ma'had Al-Jami'ah. Pindai QR Code untuk validasi keaslian.</em>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Tanggal & Tanda Tangan Kepala Ma'had -->
+                                        <td style="width: 55%; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, sans-serif;">
+                                            <div>
+                                                Parepare, <span t-out="doc.issue_date.strftime('%d %B %Y') if doc.issue_date else '10 Oktober 2026'"/>
+                                            </div>
+                                            <div style="font-weight: bold; margin-top: 2px;">
+                                                Kepala Pusat Ma'had Al-Jami'ah
+                                            </div>
+
+                                            <!-- Ruang Tanda Tangan & Stempel Resmi -->
+                                            <div style="height: 75px; position: relative; margin: 5px 0;">
+                                                <!-- Stempel Lingkaran Kemenag SVG Styling -->
+                                                <div style="display: inline-block; border: 2px dashed #1E3A8A; color: #1E3A8A; border-radius: 50%; width: 70px; height: 70px; line-height: 14px; font-size: 8px; font-weight: bold; padding-top: 15px; box-sizing: border-box; opacity: 0.85; transform: rotate(-8deg);">
+                                                    MA'HAD<br/>IAIN PARE<br/>TERVALIDASI
+                                                </div>
+                                            </div>
+
+                                            <div style="font-weight: bold; text-decoration: underline; font-size: 13px;">
+                                                Dr. H. Muh. Idris, M.Ag.
+                                            </div>
+                                            <div style="font-size: 10px; color: #374151;">
+                                                NIP. 197508152005011004
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

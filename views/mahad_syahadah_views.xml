@@ -25,6 +25,7 @@
             <form string="Syahadah Kelulusan Ma'had">
                 <header>
                     <button name="action_validate" string="Terbitkan / Luluskan" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="%(action_report_mahad_syahadah)d" string="Cetak Syahadah (PDF)" type="action" class="btn-primary" icon="fa-print"/>
                     <button name="action_cancel" string="Batalkan" type="object" invisible="state == 'cancelled'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,validated,cancelled"/>
                 </header>
@@ -38,6 +39,7 @@
                         <group>
                             <field name="student_id" readonly="state != 'draft'"/>
                             <field name="nim"/>
+                            <field name="faculty_prodi" readonly="state != 'draft'"/>
                             <field name="issue_date" readonly="state != 'draft'"/>
                         </group>
                         <group>
@@ -45,6 +47,16 @@
                             <field name="predikat" readonly="state != 'draft'"/>
                             <field name="tahfizh_target_achieved" readonly="state != 'draft'"/>
                             <field name="is_unlocked_for_skripsi" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Nilai Kompetensi / Kemampuan">
+                        <group>
+                            <field name="score_quran" readonly="state != 'draft'"/>
+                            <field name="score_surat_pendek" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="score_doa" readonly="state != 'draft'"/>
+                            <field name="score_ibadah" readonly="state != 'draft'"/>
                         </group>
                     </group>
                     <group string="Keterangan Tambahan">

@@ -69,3 +69,28 @@ class MahadApiController(http.Controller):
             'is_late': permit.is_late
         }
         return Response(json.dumps(data), content_type='application/json', status=200)
+
+    @http.route('/syahadah/verify', type='http', auth='public', website=True, sitemap=True)
+    def website_verify_syahadah(self, q=None, **kwargs):
+        """Halaman Publik Verifikasi Syahadah Mahasantri"""
+        syahadah = None
+        searched = False
+        search_query = (q or '').strip()
+
+        if search_query:
+            searched = True
+            # Cari berdasarkan NIM atau Nomor Syahadah
+            syahadah = request.env['mahad.syahadah'].sudo().search([
+                '|',
+                ('nim', '=ilike', search_query),
+                ('name', '=ilike', search_query),
+                ('state', '=', 'validated')
+            ], limit=1)
+
+        values = {
+            'searched': searched,
+            'query': search_query,
+            'syahadah': syahadah,
+        }
+        return request.render('sirita_mahad_pembinaan.page_syahadah_verify', values)
+

@@ -35,6 +35,7 @@ class MahadTalimRecord(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc, id desc'
 
+    name = fields.Char(string="Kode Record", required=True, copy=False, readonly=True, default="Baru", tracking=True)
     student_id = fields.Many2one('res.partner', string="Mahasantri", required=True, domain="[('is_student', '=', True)]", tracking=True)
     class_id = fields.Many2one('mahad.talim.class', string="Halaqah / Kelas", required=True)
     date = fields.Date(string="Tanggal", default=fields.Date.context_today, required=True)
@@ -52,3 +53,27 @@ class MahadTalimRecord(models.Model):
         ('rasib', 'Rasib (Mengulang)'),
     ], string="Predikat / Status", default='mumtaz', required=True, tracking=True)
     notes = fields.Text(string="Catatan Pembina / Musyrif")
+
+    @api.depends('name', 'student_id', 'surah_juz_topic')
+    def _compute_display_name(self):
+        for rec in self:
+            std = rec.student_id.name or 'Mahasantri'
+            topic = rec.surah_juz_topic or ''
+            kode = rec.name or 'Baru'
+            if topic:
+                rec.display_name = f"{kode} - {std} ({topic})"
+            else:
+                rec.display_name = f"{kode} - {std}"
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('name', 'Baru') in ['Baru', 'NEW', False]:
+                seq = self.env['ir.sequence'].next_by_code('mahad.talim.record')
+                if not seq:
+                    today = fields.Date.today()
+                    # Fallback jika ir.sequence belum dibuat
+                    seq = f"TLM/{today.strftime('%Y%m')}/{self.search_count([]) + 1:04d}"
+                vals['name'] = seq
+        return super().create(vals_list)
+
