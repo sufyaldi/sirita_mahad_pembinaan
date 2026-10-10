@@ -19,6 +19,7 @@
     'data': [
         'security/ir.access.csv',
         'data/ir_cron_data.xml',
+        'views/mahad_official_views.xml',
         'views/mahad_talim_views.xml',
         'views/report_syahadah_views.xml',
         'views/mahad_syahadah_views.xml',

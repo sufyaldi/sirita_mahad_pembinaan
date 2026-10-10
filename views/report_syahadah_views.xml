@@ -49,12 +49,12 @@
 
                             <!-- Header Kop Lembaga / Kampus -->
                             <div style="text-align: center; margin-bottom: 10px;">
-                                <img src="/sirita_theme/static/img/logo.png" style="height: 70px; width: auto; margin-bottom: 5px;" alt="Logo Kampus"/>
+                                <img src="/sirita_theme/static/img/logo_iain_parepare.png" style="height: 75px; width: auto; margin-bottom: 5px;" alt="Logo IAIN Parepare"/>
                                 <div style="font-size: 12px; font-weight: bold; letter-spacing: 1px; color: #1E3A8A; font-family: Arial, sans-serif;">
                                     KEMENTERIAN AGAMA REPUBLIK INDONESIA
                                 </div>
                                 <div style="font-size: 15px; font-weight: 900; letter-spacing: 0.5px; font-family: Arial, sans-serif; text-transform: uppercase;">
-                                    PUSAT MA'HAD AL-JAMI'AH
+                                    UPT. MA'HAD AL-JAMI'AH
                                 </div>
                                 <div style="font-size: 16px; font-weight: 900; letter-spacing: 0.5px; font-family: Arial, sans-serif; text-transform: uppercase;">
                                     INSTITUT AGAMA ISLAM NEGERI (IAIN) PAREPARE
@@ -76,7 +76,7 @@
 
                             <!-- Pengantar Sertifikat -->
                             <div style="text-align: justify; font-size: 12px; line-height: 1.5; margin-bottom: 15px;">
-                                Setelah memperhatikan hasil penilaian dan keputusan Majelis Penguji Ma'had Al-Jami'ah Institut Agama Islam Negeri (IAIN) Parepare, dengan ini Kepala Pusat Ma'had Al-Jami'ah memberikan:
+                                Setelah memperhatikan hasil penilaian dan keputusan Majelis Penguji Ma'had Al-Jami'ah Institut Agama Islam Negeri (IAIN) Parepare, dengan ini Kepala UPT. Ma'had Al-Jami'ah memberikan:
                             </div>
 
                             <!-- Judul Sertifikat -->
@@ -175,22 +175,77 @@
                                                 Parepare, <span t-out="doc.issue_date.strftime('%d %B %Y') if doc.issue_date else '10 Oktober 2026'"/>
                                             </div>
                                             <div style="font-weight: bold; margin-top: 2px;">
-                                                Kepala Pusat Ma'had Al-Jami'ah
+                                                <t t-out="doc.signatory_job or (doc.signatory_id and doc.signatory_id.job_title) or 'Kepala UPT. Ma\'had Al-Jami\'ah'"/>
                                             </div>
 
-                                            <!-- Ruang Tanda Tangan & Stempel Resmi -->
-                                            <div style="height: 75px; position: relative; margin: 5px 0;">
-                                                <!-- Stempel Lingkaran Kemenag SVG Styling -->
-                                                <div style="display: inline-block; border: 2px dashed #1E3A8A; color: #1E3A8A; border-radius: 50%; width: 70px; height: 70px; line-height: 14px; font-size: 8px; font-weight: bold; padding-top: 15px; box-sizing: border-box; opacity: 0.85; transform: rotate(-8deg);">
-                                                    MA'HAD<br/>IAIN PARE<br/>TERVALIDASI
-                                                </div>
+                                            <!-- Ruang Tanda Tangan Dinamis Sesuai Mode (TTE QR, Scan Basah, atau Kombinasi) -->
+                                            <div style="min-height: 85px; position: relative; margin: 4px 0;">
+                                                
+                                                <!-- MODE 1: SCAN BASAH (Menggunakan Scan Tanda Tangan Basah & Stempel) -->
+                                                <t t-if="doc.signature_mode == 'scan'">
+                                                    <!-- Stempel Resmi (jika ada) -->
+                                                    <t t-if="doc.signatory_id and doc.signatory_id.stamp_image">
+                                                        <img t-att-src="image_data_uri(doc.signatory_id.stamp_image)" 
+                                                             style="position: absolute; left: 12%; top: 2px; width: 75px; height: 75px; opacity: 0.85;" alt="Stempel Resmi"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div style="position: absolute; left: 12%; top: 5px; border: 2px dashed #1E3A8A; color: #1E3A8A; border-radius: 50%; width: 70px; height: 70px; line-height: 14px; font-size: 8px; font-weight: bold; padding-top: 15px; box-sizing: border-box; opacity: 0.85; transform: rotate(-8deg);">
+                                                            MA'HAD<br/>IAIN PARE<br/>TERVALIDASI
+                                                        </div>
+                                                    </t>
+                                                    <!-- Gambar Tanda Tangan Basah Scan (jika ada) -->
+                                                    <t t-if="doc.signatory_id and doc.signatory_id.signature_image">
+                                                        <img t-att-src="image_data_uri(doc.signatory_id.signature_image)" 
+                                                             style="position: relative; z-index: 2; height: 75px; max-width: 170px;" alt="Tanda Tangan Basah"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div style="height: 60px; padding-top: 30px; font-size: 10px; color: #6B7280; font-style: italic;">
+                                                            (Tanda Tangan Basah &amp; Cap)
+                                                        </div>
+                                                    </t>
+                                                </t>
+
+                                                <!-- MODE 2: TTE QR CODE RESMI (Standar Sertifikasi Sistem Otomatis Tanpa Teks Hardcode) -->
+                                                <t t-elif="doc.signature_mode == 'qr'">
+                                                    <div style="display: inline-block; padding: 4px; border: 1px solid #1E3A8A; background: #FFFFFF; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: center;">
+                                                        <img t-att-src="'/report/barcode/?barcode_type=QR&amp;value=https://mahad.iainpare.ac.id/tte/verify?token=' + (doc.tte_token or '') + '&amp;width=90&amp;height=90'" 
+                                                             style="width: 75px; height: 75px; display: block; margin: 0 auto;" alt="TTE QR Code"/>
+                                                        <div style="font-size: 7px; color: #4B5563; margin-top: 2px;" t-out="doc.tte_token or 'TTE-MAHAD'"/>
+                                                    </div>
+                                                </t>
+
+                                                <!-- MODE 3: KOMBINASI (Keduanya Tampil Berdampingan / Berlayer) -->
+                                                <t t-else="">
+                                                    <div style="position: relative; display: inline-block; width: 100%; height: 85px;">
+                                                        <!-- QR TTE di Sisi Kiri -->
+                                                        <div style="position: absolute; left: 5%; top: 2px; text-align: center;">
+                                                            <img t-att-src="'/report/barcode/?barcode_type=QR&amp;value=https://mahad.iainpare.ac.id/tte/verify?token=' + (doc.tte_token or '') + '&amp;width=70&amp;height=70'" 
+                                                                 style="width: 60px; height: 60px; border: 1px solid #ccc; padding: 1px;" alt="TTE QR"/>
+                                                        </div>
+                                                        <!-- Stempel & TTD Scan di Sisi Kanan -->
+                                                        <div style="position: absolute; right: 5%; top: 0; width: 140px; text-align: center;">
+                                                            <t t-if="doc.signatory_id and doc.signatory_id.stamp_image">
+                                                                <img t-att-src="image_data_uri(doc.signatory_id.stamp_image)" 
+                                                                     style="position: absolute; left: 0; top: 0; width: 65px; height: 65px; opacity: 0.8;" alt="Stempel"/>
+                                                            </t>
+                                                            <t t-if="doc.signatory_id and doc.signatory_id.signature_image">
+                                                                <img t-att-src="image_data_uri(doc.signatory_id.signature_image)" 
+                                                                     style="position: relative; z-index: 2; height: 65px; max-width: 130px;" alt="TTD Basah"/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <div style="height: 55px; padding-top: 25px; font-size: 9px; color: #6B7280;">[ Cap &amp; TTD ]</div>
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                </t>
+
                                             </div>
 
                                             <div style="font-weight: bold; text-decoration: underline; font-size: 13px;">
-                                                Dr. H. Muh. Idris, M.Ag.
+                                                <t t-out="doc.signatory_name or (doc.signatory_id and doc.signatory_id.name) or ''"/>
                                             </div>
                                             <div style="font-size: 10px; color: #374151;">
-                                                NIP. 197508152005011004
+                                                NIP. <t t-out="doc.signatory_nip or (doc.signatory_id and doc.signatory_id.nip) or '-'"/>
                                             </div>
                                         </td>
                                     </tr>

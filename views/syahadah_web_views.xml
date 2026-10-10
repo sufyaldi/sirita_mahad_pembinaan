@@ -84,6 +84,36 @@
                                                     <span class="fw-bold text-dark fs-6" t-out="syahadah.issue_date.strftime('%d %B %Y') if syahadah.issue_date else '-'"/>
                                                 </div>
 
+                                                <!-- Informasi Penandatangan Elektronik (TTE) -->
+                                                <div class="col-12">
+                                                    <div class="p-3 rounded-3 border d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3" style="background-color: #F8FAFC;">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="rounded-circle p-2 bg-primary-subtle text-primary">
+                                                                <i class="fa fa-pencil-square-o fs-4"></i>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-muted small d-block">Pengesahan Penandatangan Elektronik (TTE):</span>
+                                                                <strong class="text-dark" t-out="syahadah.signatory_name or (syahadah.signatory_id and syahadah.signatory_id.name) or ''"/>
+                                                                <span class="text-secondary small d-block">
+                                                                    <t t-out="syahadah.signatory_job or 'Kepala UPT. Ma\'had Al-Jami\'ah'"/> 
+                                                                    <t t-if="syahadah.signatory_nip or (syahadah.signatory_id and syahadah.signatory_id.nip)">
+                                                                        (NIP. <t t-out="syahadah.signatory_nip or syahadah.signatory_id.nip"/>)
+                                                                    </t>
+                                                                </span>
+                                                                <div class="small text-muted mt-1" t-if="syahadah.tte_token">
+                                                                    <code><t t-out="syahadah.tte_token"/></code>
+                                                                    <span t-if="syahadah.tte_datetime" class="ms-1">
+                                                                        • Disahkan: <span t-out="syahadah.tte_datetime.strftime('%d %b %Y, %H:%M:%S')"/>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold border border-success-subtle align-self-start align-self-sm-center">
+                                                            <i class="fa fa-qrcode me-1"></i> TTE Tervalidasi Sah
+                                                        </span>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-12">
                                                     <div class="p-3 rounded-3 bg-light border d-flex align-items-center gap-3">
                                                         <i class="fa fa-unlock-alt text-success fs-3"></i>
@@ -173,4 +203,171 @@
         </t>
     </template>
 
+    <!-- Template Khusus Verifikasi TTE Pejabat (Sesuai Standar BSSN / Digital Signature) -->
+    <template id="page_tte_verify" name="Verifikasi Tanda Tangan Elektronik Pejabat">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Hero Header Khusus TTE -->
+                <section class="py-5 text-white" style="background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%);">
+                    <div class="container text-center py-4">
+                        <span class="badge rounded-pill bg-white text-primary px-3 py-2 fw-semibold mb-3 shadow-sm">
+                            <i class="fa fa-key me-1"></i> Sistem Validasi Tanda Tangan Elektronik (TTE)
+                        </span>
+                        <h1 class="fw-bold display-5 mb-2">Verifikasi TTE Pejabat Resmi</h1>
+                        <p class="lead opacity-75 mx-auto" style="max-width: 680px;">
+                            Pangkalan Validasi Keabsahan Penandatangan Digital UPT. Ma'had Al-Jami'ah IAIN Parepare
+                        </p>
+
+                        <!-- Form Cek Token TTE -->
+                        <div class="row justify-content-center mt-3">
+                            <div class="col-12 col-md-8 col-lg-6">
+                                <form action="/tte/verify" method="GET" class="d-flex bg-white p-2 rounded-pill shadow-lg">
+                                    <input type="text" name="token" t-att-value="token" 
+                                           class="form-control border-0 rounded-pill px-4 shadow-none text-dark" 
+                                           placeholder="Masukkan Kode Token TTE (Contoh: TTE-SYH-2026-...)" required="required"/>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold text-white d-flex align-items-center gap-2" style="background-color: #1E3A8A;">
+                                        <i class="fa fa-shield"></i>
+                                        <span>Verifikasi</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Status Hasil Verifikasi TTE -->
+                <section class="py-5 bg-light" style="min-height: 440px;">
+                    <div class="container">
+                        
+                        <t t-if="searched and syahadah">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-10 col-lg-8">
+                                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                                        <!-- Header Card TTE Valid -->
+                                        <div class="p-4 text-white text-center" style="background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);">
+                                            <div class="display-4 mb-2">
+                                                <i class="fa fa-id-badge"></i>
+                                            </div>
+                                            <h3 class="fw-bold mb-1">TANDA TANGAN ELEKTRONIK SAH &amp; TERVERIFIKASI</h3>
+                                            <p class="mb-0 text-white-50 small">Dokumen ditandatangani secara digital oleh Pejabat Berwenang yang Sah</p>
+                                        </div>
+
+                                        <div class="card-body p-4 p-md-5">
+                                            <div class="row g-4">
+                                                <!-- Profil Pejabat Penandatangan -->
+                                                <div class="col-12">
+                                                    <div class="p-4 rounded-3 border bg-white shadow-sm">
+                                                        <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
+                                                            <div class="rounded-circle p-3 bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                                                <i class="fa fa-user-circle fs-2"></i>
+                                                            </div>
+                                                            <div>
+                                                                <span class="badge bg-success-subtle text-success mb-1">
+                                                                    <i class="fa fa-check-circle me-1"></i> Penandatangan Sah
+                                                                </span>
+                                                                <h4 class="fw-bold text-dark mb-0" t-out="syahadah.signatory_name or (syahadah.signatory_id and syahadah.signatory_id.name)"/>
+                                                                <div class="text-secondary fw-semibold" t-out="syahadah.signatory_job or 'Kepala UPT. Ma\'had Al-Jami\'ah'"/>
+                                                                <div class="text-muted small">
+                                                                    NIP: <span t-out="syahadah.signatory_nip or '-'"/> 
+                                                                    <t t-if="syahadah.signatory_sk">
+                                                                        • <span t-out="syahadah.signatory_sk"/>
+                                                                    </t>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Detail Digital Signature Token -->
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">ID Token TTE Digital</span>
+                                                    <code class="fs-6 fw-bold text-primary" t-out="syahadah.tte_token"/>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <span class="text-muted small d-block">Waktu Pengesahan (Timestamp)</span>
+                                                    <span class="fw-bold text-dark fs-6" t-out="syahadah.tte_datetime.strftime('%d %B %Y, %H:%M:%S WITA') if syahadah.tte_datetime else '-'"/>
+                                                </div>
+
+                                                <!-- Dokumen Yang Ditandatangani -->
+                                                <div class="col-12">
+                                                    <div class="p-3 rounded-3 bg-light border">
+                                                        <span class="text-muted small d-block mb-1">Dokumen Resmi Yang Disahkan:</span>
+                                                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                                                            <div>
+                                                                <strong class="text-dark" t-out="syahadah.name"/> — Syahadah Kelulusan Ma'had Al-Jami'ah
+                                                                <div class="small text-secondary">
+                                                                    Penerima: <span class="fw-semibold text-dark" t-out="syahadah.student_id.name"/> (NIM: <span t-out="syahadah.nim or '-'"/>)
+                                                                </div>
+                                                            </div>
+                                                            <a t-att-href="'/syahadah/verify?q=' + (syahadah.nim or syahadah.name)" 
+                                                               class="btn btn-sm btn-outline-teal rounded-pill px-3 fw-semibold">
+                                                                <i class="fa fa-external-link me-1"></i> Buka e-Sertifikat
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 text-center text-muted small">
+                                                    <i class="fa fa-lock text-success me-1"></i>
+                                                    Keaslian tanda tangan ini dijamin oleh sistem enkripsi terpadu Ma'had Al-Jami'ah IAIN Parepare.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer bg-white border-top p-3 text-center">
+                                            <a href="/tte/verify" class="btn btn-outline-secondary rounded-pill px-4 btn-sm">
+                                                <i class="fa fa-refresh me-1"></i> Cek Token Lain
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- JIKA TOKEN TIDAK DITEMUKAN -->
+                        <t t-elif="searched and not syahadah">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-8 col-lg-6">
+                                    <div class="card border-0 shadow-sm rounded-4 text-center p-4 p-md-5">
+                                        <div class="text-danger display-4 mb-3">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                        </div>
+                                        <h4 class="fw-bold mb-2">Token TTE Tidak Valid</h4>
+                                        <p class="text-muted mb-4">
+                                            Token tanda tangan elektronik <code><t t-out="token"/></code> tidak ditemukan dalam pangkalan data arsip resmi atau sertifikat belum divalidasi.
+                                        </p>
+                                        <a href="/tte/verify" class="btn btn-outline-primary rounded-pill px-4 align-self-center">
+                                            <i class="fa fa-arrow-left me-2"></i> Coba Lagi
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- TAMPILAN DEFAULT SEBELUM PENCARIAN -->
+                        <t t-else="">
+                            <div class="row justify-content-center text-center">
+                                <div class="col-12 col-md-8 col-lg-6">
+                                    <div class="p-4 p-md-5 rounded-4 bg-white shadow-sm border">
+                                        <div class="text-primary fs-1 mb-3">
+                                            <i class="fa fa-certificate"></i>
+                                        </div>
+                                        <h4 class="fw-bold">Pemeriksaan Keabsahan TTE</h4>
+                                        <p class="text-muted small mb-0">
+                                            Pindai QR Code pada kolom tanda tangan Kepala UPT. Ma'had atau ketik Token TTE resmi untuk memastikan legalitas dan integritas digital tanda tangan pejabat.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
 </odoo>
+

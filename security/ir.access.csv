@@ -12,3 +12,5 @@ access_mahad_penalty_category_manager,access.mahad.penalty.category.manager,maha
 access_mahad_penalty_record_user,access.mahad.penalty.record.user,mahad.penalty.record,sirita_mahad.group_hostel_user,cru,
 access_mahad_penalty_record_manager,access.mahad.penalty.record.manager,mahad.penalty.record,sirita_mahad.group_hostel_manager,crud,
 access_mahad_billing_wizard_manager,access.mahad.billing.wizard.manager,mahad.billing.wizard,sirita_mahad.group_hostel_manager,crud,
+access_mahad_official_user,access.mahad.official.user,mahad.official,sirita_mahad.group_hostel_user,r,
+access_mahad_official_manager,access.mahad.official.manager,mahad.official,sirita_mahad.group_hostel_manager,crud,

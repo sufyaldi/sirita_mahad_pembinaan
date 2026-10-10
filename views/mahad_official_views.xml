@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View Pejabat Ma'had -->
+    <record id="view_mahad_official_tree" model="ir.ui.view">
+        <field name="name">mahad.official.tree</field>
+        <field name="model">mahad.official</field>
+        <field name="arch" type="xml">
+            <list string="Daftar Pejabat / Kepala Ma'had">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="nip"/>
+                <field name="job_title"/>
+                <field name="sk_number"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="is_active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View Pejabat Ma'had -->
+    <record id="view_mahad_official_form" model="ir.ui.view">
+        <field name="name">mahad.official.form</field>
+        <field name="model">mahad.official</field>
+        <field name="arch" type="xml">
+            <form string="Pejabat / Kepala Ma'had Al-Jami'ah">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Nama Pejabat"/>
+                        <h1>
+                            <field name="name" placeholder="Dr. H. Nama Lengkap, M.Ag." required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Integrasi Karyawan &amp; Jabatan">
+                            <field name="employee_id" placeholder="Pilih dari Master Karyawan HR Odoo"/>
+                            <field name="nip" placeholder="Nomor Induk Pegawai"/>
+                            <field name="job_title" placeholder="Kepala Pusat Ma'had Al-Jami'ah"/>
+                            <field name="signature_mode" widget="radio"/>
+                            <field name="is_active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Legalitas &amp; Periode SK">
+                            <field name="sk_number" placeholder="SK Rektor No. xxx Tahun yyyy"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+                    <group string="Spesimen Tanda Tangan Elektronik &amp; Stempel">
+                        <group>
+                            <field name="signature_image" widget="image" class="oe_avatar" options="{'size': [160, 160]}" string="Tanda Tangan Digital (PNG Transparan)"/>
+                        </group>
+                        <group>
+                            <field name="stamp_image" widget="image" class="oe_avatar" options="{'size': [160, 160]}" string="Stempel Resmi UPT (PNG Transparan)"/>
+                        </group>
+                    </group>
+                    <group string="Catatan Internal">
+                        <field name="notes" placeholder="Catatan tugas, wewenang, atau riwayat SK..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Pejabat Ma'had -->
+    <record id="action_mahad_official" model="ir.actions.act_window">
+        <field name="name">Kepala &amp; Pejabat Ma'had</field>
+        <field name="res_model">mahad.official</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Tambahkan Master Data Kepala Ma'had Al-Jami'ah
+            </p>
+            <p>
+                Pejabat yang diatur sebagai "Pejabat Aktif" akan otomatis dijadikan penandatangan default pada setiap penerbitan Syahadah kelulusan santri.
+            </p>
+        </field>
+    </record>
+</odoo>

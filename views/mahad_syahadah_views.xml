@@ -49,6 +49,20 @@
                             <field name="is_unlocked_for_skripsi" readonly="1"/>
                         </group>
                     </group>
+                    <group string="Pengesahan &amp; Pejabat Penandatangan (TTE)">
+                        <group>
+                            <field name="signatory_id" readonly="state != 'draft'"/>
+                            <field name="signatory_name" readonly="state != 'draft'"/>
+                            <field name="signature_mode" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="signatory_nip" readonly="state != 'draft'"/>
+                            <field name="signatory_job" readonly="state != 'draft'"/>
+                            <field name="signatory_sk" readonly="state != 'draft'"/>
+                            <field name="tte_token" readonly="1" invisible="not tte_token"/>
+                            <field name="tte_datetime" readonly="1" invisible="not tte_datetime"/>
+                        </group>
+                    </group>
                     <group string="Nilai Kompetensi / Kemampuan">
                         <group>
                             <field name="score_quran" readonly="state != 'draft'"/>

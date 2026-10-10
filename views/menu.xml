@@ -30,6 +30,14 @@
               sequence="30"
               groups="sirita_mahad.group_hostel_manager"/>
 
+    <menuitem id="menu_mahad_official"
+              name="Kepala &amp; Pejabat Ma'had"
+              parent="menu_mahad_academic_root"
+              action="action_mahad_official"
+              sequence="40"
+              groups="sirita_mahad.group_hostel_manager"/>
+
+
     <!-- ============================================================ -->
     <!--  2. Perizinan &amp; Gate Control                                 -->
     <!-- ============================================================ -->

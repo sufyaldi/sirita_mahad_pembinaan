@@ -72,18 +72,19 @@ class MahadApiController(http.Controller):
 
     @http.route('/syahadah/verify', type='http', auth='public', website=True, sitemap=True)
     def website_verify_syahadah(self, q=None, **kwargs):
-        """Halaman Publik Verifikasi Syahadah Mahasantri"""
+        """Halaman Publik Verifikasi e-Sertifikat Dokumen Syahadah"""
         syahadah = None
         searched = False
         search_query = (q or '').strip()
 
         if search_query:
             searched = True
-            # Cari berdasarkan NIM atau Nomor Syahadah
+            # Cari berdasarkan NIM, Nomor Syahadah, atau TTE Token
             syahadah = request.env['mahad.syahadah'].sudo().search([
-                '|',
+                '|', '|',
                 ('nim', '=ilike', search_query),
                 ('name', '=ilike', search_query),
+                ('tte_token', '=ilike', search_query),
                 ('state', '=', 'validated')
             ], limit=1)
 
@@ -93,4 +94,26 @@ class MahadApiController(http.Controller):
             'syahadah': syahadah,
         }
         return request.render('sirita_mahad_pembinaan.page_syahadah_verify', values)
+
+    @http.route('/tte/verify', type='http', auth='public', website=True, sitemap=True)
+    def website_verify_tte(self, token=None, **kwargs):
+        """Halaman Khusus Verifikasi Sertifikat & Keabsahan TTE Pejabat (BSSN/PTKIN Standar)"""
+        syahadah = None
+        searched = False
+        token_str = (token or kwargs.get('q') or '').strip()
+
+        if token_str:
+            searched = True
+            syahadah = request.env['mahad.syahadah'].sudo().search([
+                ('tte_token', '=ilike', token_str),
+                ('state', '=', 'validated')
+            ], limit=1)
+
+        values = {
+            'searched': searched,
+            'token': token_str,
+            'syahadah': syahadah,
+        }
+        return request.render('sirita_mahad_pembinaan.page_tte_verify', values)
+
 
