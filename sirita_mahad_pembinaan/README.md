@@ -13,7 +13,7 @@ Modul ini beroperasi berdampingan dengan modul manajemen hunian asrama (sirita_m
 - Kategori: Education / Ma'had
 - Versi: 20.0.1.0.0
 - Lisensi: LGPL-3
-- Penulis / Author: sufyALDI | TIPD IAIN Parepare
+- Penulis / Author: sufyALDI | TIPD IAIN Parepare | Forum PTIPD PTKIN
 - Dependensi: base, web, mail, sirita_mahad
 
 ---

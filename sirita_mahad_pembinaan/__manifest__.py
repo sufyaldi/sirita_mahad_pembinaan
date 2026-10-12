@@ -12,7 +12,7 @@
         4. Sistem Poin Pelanggaran Kedisiplinan & Takzir Edukatif (SP-1, SP-2, SP-3).
         5. Otomatisasi Cron Keterlambatan & Generasi Tagihan Massal BLU.
     """,
-    'author': 'sufyALDI / TIPD IAIN Parepare',
+    'author': 'sufyALDI | TIPD IAIN Parepare | Forum PTIPD PTKIN',
     'website': 'https://iainpare.ac.id',
     'license': 'LGPL-3',
     'depends': ['base', 'web', 'website', 'sirita_mahad', 'mail'],
@@ -32,4 +32,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'images': ['static/description/banner.png'],
 }
